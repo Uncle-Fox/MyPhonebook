@@ -1,6 +1,6 @@
 import json
 
-#Надо добавить сортировку книги, а то сейчас выводит как они были записаны
+#Надо добавить сортировку книги(?), а то сейчас выводит как они были записаны
 
 def save():
     with open("phoneNumber.json", "w", encoding="utf-8") as doc:
@@ -53,53 +53,35 @@ def add():
         f'Email: {email}\n'
         f'Телефон: {phone_str}\n')
     
-def change(): #добавить функцию по изменению абонента
-    global phonebook 
-    Show_all()
-    num = int(input("Выберите id абонента, которого хотите изменить в книге: "))
-    key_to_change = find_key(num)
-    if key_to_change is not None:
-        abonent = phonebook[key_to_change] #новая строка
-        print("Выберите что хотите изменить: ")
-        for key, value in phonebook.items():
-            if 'id' in value and value['id'] == num:
-                print(f"№ {value.get('id', 'N/A')}. {key}: телефон {', '.join(map(str, value['phones']))}; дата рождения: {value.get('birthday', 'N/A')}; email: {value.get('email', 'N/A')}")
-                value_to_change = input("id - id, name - name, number - number, birthday - birthday, email - email\n")
-                value_to_change_list = ["id", "name", "number", "birthday", "email"]
-                if value_to_change in value_to_change_list:
-                    changed_value = input("Введите новые данные: ")
-                    phonebook['{value_to_change}'] = changed_value
-                else: print("Вы ошиблись параметром! Попробуйте еще раз")
-    else: 
-        print(f"Хорошая попытка! Твоего абонента № {num} нет в книге.")
-        return
 
-def change2():
-    global phonebook 
+def change():
+    global phonebook
     Show_all()
-    num = int(input("Выберите id абонента, которого хотите изменить в книге: "))
+    num = (input("Выберите id абонента, которого хотите изменить в книге: "))
     key_to_change = find_key(num)
-    
+
     if key_to_change is not None:
         abonent = phonebook[key_to_change]  # Получаем словарь данных абонента
 
         print(f"Выберите, что хотите изменить для {key_to_change}:")
-        print(f"Текущие данные: {abonent}")
-        
-        value_to_change = input("id - id, name - name, number - number, birthday - birthday, email - email\n")
-        value_to_change_list = ["id", "name", "number", "birthday", "email"]
+        for key, value in phonebook.items():
+            if 'id' in value and value['id'] == num:
+                print(f"№ {value.get('id', 'N/A')}. {key}: телефон {', '.join(map(str, value['phones']))}; дата рождения: {value.get('birthday', 'N/A')}; email: {value.get('email', 'N/A')}")
+
+
+        value_to_change = input("id - id, name - name, phones - phones, birthday - birthday, email - email\n")
+        value_to_change_list = ["id", "phones", "birthday", "email", "address"]
 
         if value_to_change in value_to_change_list:
             changed_value = input(f"Введите новые данные для {value_to_change}: ")
             abonent[value_to_change] = changed_value
-            print(f"Данные для {key_to_change} обновлены: {abonent}")
+            print(f"Данные для {key_to_change} обновлены! {value_to_change} теперь {changed_value}\n") 
+            save()
+            Show_all()
         else:
             print("Вы ошиблись параметром! Попробуйте еще раз")
     else:
         print(f"Абонент с id {num} не найден в книге.")
-
-
-
 
 def find_key(num): #Надо использовать эту функцию в delete и в change
     global phonebook
@@ -129,21 +111,6 @@ def delete(): #добавить функцию по полному удален�
             print(f"Абонент с id {key_to_delete} удален из книги.")
     else:
         print(f"Абонент с ID {num} не найден")
-
-
-"""     with open("phoneNumber.json", "r", encoding="utf-8") as doc:
-        phonebook_data = json.load(doc)
-        
-        if number == phonebook_data:
-            x = input("Вы точно хотите удалить этого абонента? Введите 'N' для 'Нет' или 'Y' для 'Да': ")
-            if x.lower() == 'n':
-                pass
-            elif x.lower() == 'y':
-                phonebook.pop(entry_id)
-                print(f"Абонент с id {number} удален из книги.")
-        else:
-            print(f"Абонента с таким id не существует") """
-
 
 
 phonebook = load()
@@ -176,7 +143,7 @@ while True:
 
     elif command == "delete": delete(), save()
 
-    elif command == "change": change(), save()
+    elif command == "change": change()
 
     else:
         print('Вы ввели неверную команду! Для списка команд обратитесь к "info"!')
