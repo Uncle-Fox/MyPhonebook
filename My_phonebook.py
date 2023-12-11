@@ -93,7 +93,7 @@ def find_key(num): #Надо использовать эту функцию в d
 def delete():
     global phonebook 
     Show_all()
-    num = int(input("Выберите id абонента, которого хотите удалить из книги: "))
+    num = (input("Выберите id абонента, которого хотите удалить из книги: "))
     key_to_delete = None
     for key, value in phonebook.items():
         if 'id' in value and value['id'] == num:
