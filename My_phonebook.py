@@ -36,8 +36,6 @@ def add():
             entry_id = id_counter + 1
         else: entry_id = id_counter
 
-    #id_counter += 1  //возможно можно удалить эту строку, т.к. в global переменная объявлена как "длина словаря + 1" 
-
     if name in phonebook:
             phonebook[name]['phones'].extend(phone)
             phonebook[name]['birthday'] = birthday
@@ -69,11 +67,11 @@ def change():
                 print(f"№ {value.get('id', 'N/A')}. {key}: телефон {', '.join(map(str, value['phones']))}; дата рождения: {value.get('birthday', 'N/A')}; email: {value.get('email', 'N/A')}")
 
 
-        value_to_change = input("id - id, name - name, phones - phones, birthday - birthday, email - email\n")
+        value_to_change = input("id - id, phones - phones, birthday - birthday, email - email\n")
         value_to_change_list = ["id", "phones", "birthday", "email", "address"]
 
         if value_to_change in value_to_change_list:
-            changed_value = input(f"Введите новые данные для {value_to_change}: ")
+            changed_value = input(f"Введите новые данные для {value_to_change}: ").split()
             abonent[value_to_change] = changed_value
             print(f"Данные для {key_to_change} обновлены! {value_to_change} теперь {changed_value}\n") 
             save()
@@ -92,7 +90,7 @@ def find_key(num): #Надо использовать эту функцию в d
             return key_to_delete
     if key_to_delete == None: print(f"Абонент с ID {num} не найден")
 
-def delete(): #добавить функцию по полному удалению абонента
+def delete():
     global phonebook 
     Show_all()
     num = int(input("Выберите id абонента, которого хотите удалить из книги: "))
