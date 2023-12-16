@@ -13,8 +13,11 @@ labelBg.place(x = 0, y = 0)
 terminal_text_Output = Text(root, wrap=WORD, height=30, width=80, font=('Courier New', 12))
 terminal_text_Output.place(x= 400, y=50)
 
-terminal_text_Input = Text(root, wrap=WORD, height=5, width=80, font=('Courier New', 12))
-terminal_text_Input.place(x= 400, y=655)
+terminal_text_Input = Text(root, wrap=WORD, height=5, width=55, font=('Courier New', 12))
+terminal_text_Input.place(x= 650, y=655)
+
+terminal_text_Input_Info = Text(root, wrap=WORD, height=5, width=20, font=('Courier New', 12))
+terminal_text_Input_Info.place(x= 400, y=655)
 
 def Input_data():
     input_data = terminal_text_Input.get("1.0", END)
@@ -26,14 +29,12 @@ def click():
 
 def save():
     with open("phoneNumber.json", "w", encoding="utf-8") as doc:
-        doc.write(json.dumps(phonebook, ensure_ascii=False)) #заменить тест бук
-    print("")
+        doc.write(json.dumps(phonebook, ensure_ascii=False))
 
 def load():
     try:
         with open("phoneNumber.json", "r", encoding="utf-8") as doc:
             telephone = json.load(doc)
-        print("")
         return telephone
     except FileNotFoundError:
         return {}
@@ -43,7 +44,7 @@ def Show_all():
     with open("phoneNumber.json", "r", encoding="utf-8") as doc:
         phonebook_data = json.load(doc)
         for name, data in phonebook_data.items():
-            print(f"№ {data.get('id', 'N/A')}. {name}: телефон {', '.join(map(str, data['phones']))}; дата рождения: {data.get('birthday', 'N/A')}; email: {data.get('email', 'N/A')}")
+            terminal_text_Output.insert(END, f"№ {data.get('id', 'N/A')}. {name}: телефон {', '.join(map(str, data['phones']))}; дата рождения: {data.get('birthday', 'N/A')}; email: {data.get('email', 'N/A')}")
 
 def add():
     global id_counter
@@ -66,7 +67,7 @@ def add():
         phonebook[name] = {'id': entry_id, 'phones': phone, 'birthday': birthday, 'email': email}
 
     phone_str = ', '.join(phone)
-    print(f'Вы добавили нового абонента: \n'
+    terminal_text_Output.insert(END, f'Вы добавили нового абонента: \n'
         f'ID: {entry_id}\n'
         f'Имя: {name}\n'
         f'День рождения: {birthday}\n'
@@ -193,6 +194,8 @@ btn5 = Button(root,
 btn5.place(x = 60, y = 355)
 
 input_data = terminal_text_Input.get("1.0", END)
+#после ввода данных, нужно удалять все данные из окна:
+#text.delete(1.0,END)
 
 btn6 = Button(root,
             text = 'Help',

@@ -15,8 +15,11 @@ labelBg.place(x = 0, y = 0)
 terminal_text_Output = Text(root, wrap=WORD, height=30, width=80, font=('Courier New', 12))
 terminal_text_Output.place(x= 400, y=50)
 
-terminal_text_Input = Text(root, wrap=WORD, height=5, width=80, font=('Courier New', 12))
-terminal_text_Input.place(x= 400, y=655)
+terminal_text_Input = Text(root, wrap=WORD, height=5, width=55, font=('Courier New', 12))
+terminal_text_Input.place(x= 650, y=655)
+
+terminal_text_Input_Info = Text(root, wrap=WORD, height=5, width=20, font=('Courier New', 12))
+terminal_text_Input_Info.place(x= 400, y=655)
 
 def Input_data():
     input_data = terminal_text_Input.get("1.0", END)
