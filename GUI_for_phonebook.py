@@ -12,12 +12,20 @@ bg = PhotoImage(file= "Bg.png")
 labelBg = Label(root, image= bg)
 labelBg.place(x = 0, y = 0)
 
+terminal_text_Output = Text(root, wrap=WORD, height=30, width=80, font=('Courier New', 12))
+terminal_text_Output.place(x= 400, y=50)
+
+terminal_text_Input = Text(root, wrap=WORD, height=5, width=80, font=('Courier New', 12))
+terminal_text_Input.place(x= 400, y=655)
+
+def Input_data():
+    input_data = terminal_text_Input.get("1.0", END)
+    btn6.config(command=lambda: terminal_text_Output.insert(END, f">>> {input_data}"))
+
 def click():
     x = "Hello!"
     terminal_text_Output.insert(END, f">>> {x}\n")
 
-def test():
-    terminal_text_Output.insert(END, f"END\n")
 # btn = Button(root,
 #             text = 'Кнопка №1',
 #             command = click,
@@ -39,7 +47,6 @@ btn = Button(root,
             activeforeground = 'white',
             fg = 'brown',
             width = 17
-            #height = 1
             )
 btn.place(x = 60, y = 55)
 
@@ -90,9 +97,10 @@ btn5 = Button(root,
             )
 btn5.place(x = 60, y = 355)
 
+input_data = terminal_text_Input.get("1.0", END)
+
 btn6 = Button(root,
             text = 'Help',
-            command = test,
             font = ('Comic Sans MS', 20),
             bg = 'white',
             activebackground = 'green',
@@ -100,6 +108,17 @@ btn6 = Button(root,
             fg = 'brown'
             )
 btn6.place(x = 60, y = 430)
+
+btn7 = Button(root,
+            text = 'Ввод данных',
+            command = Input_data,
+            font = ('Comic Sans MS', 20),
+            bg = 'white',
+            activebackground = 'green',
+            activeforeground = 'white',
+            fg = 'brown'
+            )
+btn7.place(x = 760, y = 760)
 
 btn8 = Button(root,
             text = 'Выход',
@@ -111,7 +130,6 @@ btn8 = Button(root,
             fg = 'brown'
             )
 btn8.place(x = 60, y = 730)
-
 
 label = Label(root,
             text = 'PhoneBook',
@@ -131,12 +149,5 @@ label2 = Label(root,
             fg = 'brown'
             )
 label2.place(x = 750, y = 599)
-
-
-terminal_text_Output = Text(root, wrap=WORD, height=30, width=80, font=('Courier New', 12))
-terminal_text_Output.place(x= 400, y=50)
-
-terminal_text_Input = Text(root, wrap=WORD, height=5, width=80, font=('Courier New', 12))
-terminal_text_Input.place(x= 400, y=655)
 
 root.mainloop()
