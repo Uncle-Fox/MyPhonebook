@@ -4,7 +4,7 @@ from tkinter import *
 
 root = Tk()
 root.title('Phonebook')
-root.geometry('840x840')
+root.geometry('1240x840')
 root.resizable(width = False, height = False)
 
 #root.config(bg = 'Yellow') - создание фона
@@ -13,9 +13,11 @@ labelBg = Label(root, image= bg)
 labelBg.place(x = 0, y = 0)
 
 def click():
-    print("Hello!")
+    x = "Hello!"
+    terminal_text.insert(END, f">>> {x}\n")
 
-
+def test():
+    terminal_text.insert(END, f"END\n")
 # btn = Button(root,
 #             text = 'Кнопка №1',
 #             command = click,
@@ -29,53 +31,56 @@ def click():
 
 
 btn = Button(root,
-            text = 'Кнопка №1',
+            text = 'Открыть контакты',
             command = click,
             font = ('Comic Sans MS', 20),
             bg = 'white',
             activebackground = 'green',
             activeforeground = 'white',
             fg = 'brown',
-            width = 10,
-            height = 1
+            width = 17
+            #height = 1
             )
 btn.place(x = 60, y = 55)
 
 btn2 = Button(root,
-            text = 'Кнопка №2',
+            text = 'Добавить контакт',
             command = click,
             font = ('Comic Sans MS', 20),
             bg = 'white',
             activebackground = 'green',
             activeforeground = 'white',
-            fg = 'brown'
+            fg = 'brown',
+            width = 17
             )
 btn2.place(x = 60, y = 130)
 
 btn3 = Button(root,
-            text = 'Кнопка №3',
+            text = 'Удалить контакт',
             command = click,
             font = ('Comic Sans MS', 20),
             bg = 'white',
             activebackground = 'green',
             activeforeground = 'white',
-            fg = 'brown'
+            fg = 'brown',
+            width = 17
             )
 btn3.place(x = 60, y = 205)
 
 btn4 = Button(root,
-            text = 'Кнопка №4',
+            text = 'Изменить контакт',
             command = click,
             font = ('Comic Sans MS', 20),
             bg = 'white',
             activebackground = 'green',
             activeforeground = 'white',
-            fg = 'brown'
+            fg = 'brown',
+            width = 17
             )
 btn4.place(x = 60, y = 280)
 
 btn5 = Button(root,
-            text = 'Кнопка №5',
+            text = 'Загрузка справочника',
             command = click,
             font = ('Comic Sans MS', 20),
             bg = 'white',
@@ -86,8 +91,8 @@ btn5 = Button(root,
 btn5.place(x = 60, y = 355)
 
 btn6 = Button(root,
-            text = 'Кнопка №6',
-            command = click,
+            text = 'Help',
+            command = test,
             font = ('Comic Sans MS', 20),
             bg = 'white',
             activebackground = 'green',
@@ -95,17 +100,6 @@ btn6 = Button(root,
             fg = 'brown'
             )
 btn6.place(x = 60, y = 430)
-
-btn7 = Button(root,
-            text = 'Кнопка №7',
-            command = click,
-            font = ('Comic Sans MS', 20),
-            bg = 'white',
-            activebackground = 'green',
-            activeforeground = 'white',
-            fg = 'brown'
-            )
-btn7.place(x = 60, y = 505)
 
 btn8 = Button(root,
             text = 'Выход',
@@ -127,6 +121,20 @@ label = Label(root,
             activeforeground = 'white',
             fg = 'brown'
             ).pack()
+
+label2 = Label(root,
+            text = 'Ввод команд',
+            font = ('Comic Sans MS', 20),
+            bg = '#FAF5D5',
+            activebackground = 'green',
+            activeforeground = 'white',
+            fg = 'brown'
+            )
+label2.place(x = 750, y = 599)
+
+
+terminal_text = Text(root, wrap=WORD, height=30, width=80, font=('Courier New', 12))
+terminal_text.place(x= 400, y=50)
 
 
 root.mainloop()
