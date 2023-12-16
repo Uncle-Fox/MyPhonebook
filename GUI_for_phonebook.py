@@ -14,10 +14,10 @@ labelBg.place(x = 0, y = 0)
 
 def click():
     x = "Hello!"
-    terminal_text.insert(END, f">>> {x}\n")
+    terminal_text_Output.insert(END, f">>> {x}\n")
 
 def test():
-    terminal_text.insert(END, f"END\n")
+    terminal_text_Output.insert(END, f"END\n")
 # btn = Button(root,
 #             text = 'Кнопка №1',
 #             command = click,
@@ -133,8 +133,10 @@ label2 = Label(root,
 label2.place(x = 750, y = 599)
 
 
-terminal_text = Text(root, wrap=WORD, height=30, width=80, font=('Courier New', 12))
-terminal_text.place(x= 400, y=50)
+terminal_text_Output = Text(root, wrap=WORD, height=30, width=80, font=('Courier New', 12))
+terminal_text_Output.place(x= 400, y=50)
 
+terminal_text_Input = Text(root, wrap=WORD, height=5, width=80, font=('Courier New', 12))
+terminal_text_Input.place(x= 400, y=655)
 
 root.mainloop()
