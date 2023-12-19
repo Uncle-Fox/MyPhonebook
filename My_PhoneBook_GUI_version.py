@@ -45,8 +45,9 @@ def Show_all():
     terminal_text_Output.insert(END, "Текущий телефонный справочник\n")
     with open("phoneNumber.json", "r", encoding="utf-8") as doc:
         phonebook_data = json.load(doc)
-        #sorted_phonebook_data = sorted(phonebook_data.items(), key=lambda item: item[1]["id"]) - нужно добавить сортировку, сейчас идет сбой int - string из-за int 4 в словаре
-        for name, data in phonebook_data.items():
+        sorted_phonebook_data = sorted(phonebook_data.items(), key=lambda item: item[1]["id"]) #- нужно добавить сортировку, сейчас идет сбой int - string из-за int 4 в словаре
+        
+        for name, data in sorted_phonebook_data:
             terminal_text_Output.insert(END, f"№ {data.get('id', 'N/A')}. {name}: телефон {', '.join(map(str, data['phones']))}; дата рождения: {data.get('birthday', 'N/A')}; email: {data.get('email', 'N/A')}\n")
 
 def clear_input_fields():
@@ -78,57 +79,46 @@ def add():
 
     save(phonebook)
     Show_all()
-    #clear_input_fields
 
 def change():
-    global phonebook
+    phonebook = load()
     Show_all()
-    num = (input("Выберите id абонента, которого хотите изменить в книге: "))
-    key_to_change = find_key(num)
+    id_to_change = int(terminal_text_Input_id.get())
+
+    name = terminal_text_Input_Name.get()
+    birthday = terminal_text_Input_birthday.get()
+    email = terminal_text_Input_Email.get()
+    phone =  terminal_text_Input_Phone.get().split()
+
+    key_to_change = None
+    for key, value in phonebook.items():
+        if 'id' in value and value['id'] == id_to_change:
+            key_to_change = key
+            break
 
     if key_to_change is not None:
-        abonent = phonebook[key_to_change]  # Получаем словарь данных абонента
-
-        print(f"Выберите, что хотите изменить для {key_to_change}:")
-        for key, value in phonebook.items():
-            if 'id' in value and value['id'] == num:
-                print(f"№ {value.get('id', 'N/A')}. {key}: телефон {', '.join(map(str, value['phones']))}; дата рождения: {value.get('birthday', 'N/A')}; email: {value.get('email', 'N/A')}")
-
-
-        value_to_change = input("id - id, phones - phones, birthday - birthday, email - email\n")
-        value_to_change_list = ["id", "phones", "birthday", "email", "address"]
-
-        if value_to_change in value_to_change_list:
-            changed_value = input(f"Введите новые данные для {value_to_change}: ").split()
-            abonent[value_to_change] = changed_value
-            print(f"Данные для {key_to_change} обновлены! {value_to_change} теперь {changed_value}\n") 
-            save()
-            Show_all()
-        else:
-            print("Вы ошиблись параметром! Попробуйте еще раз")
+        phonebook[key_to_change]['phones'] = phone
+        phonebook[key_to_change]['birthday'] = birthday
+        phonebook[key_to_change]['email'] = email
     else:
-        print(f"Абонент с id {num} не найден в книге.")
+        terminal_text_Output.delete(1.0, END)
+        terminal_text_Output.insert(END, "Абонент не найден.")
 
-def find_key(num): #Надо использовать эту функцию в delete и в change
+    save(phonebook)
+    Show_all()
+
+""" def find_key(num): #Надо использовать эту функцию в delete и в change
     global phonebook
     key_to_delete = None
     for key, value in phonebook.items():
         if 'id' in value and value['id'] == num:
             key_to_delete = key
             return key_to_delete
-    if key_to_delete == None: print(f"Абонент с ID {num} не найден")
-
-def delete_info():
-    Show_all()
-    terminal_text_Input_Info.delete(1.0, END)
-    terminal_text_Input_Info.insert(END, f'Введите id абонента\n'
-                                        f'Или введите его имя\n\n'
-                                        f'Будет удален выбранный\n'
-                                        f'абонент из вашей книги\n')
+    if key_to_delete == None: print(f"Абонент с ID {num} не найден") """
 
 def delete(): #сначала будет осуществлен вариант удаления только через id
     phonebook = load()
-    info_to_delete = terminal_text_Input_Name.get()
+    info_to_delete = terminal_text_Input_id.get()
 
     key_to_delete = None
     for key, value in phonebook.items():
@@ -141,8 +131,8 @@ def delete(): #сначала будет осуществлен вариант �
         save(phonebook)
         Show_all()
     else:
-        terminal_text_Input_Info.delete(1.0, END)
-        terminal_text_Input_Info.insert(END, "Абонент не найден.")
+        terminal_text_Output.delete(1.0, END)
+        terminal_text_Output.insert(END, "Абонент не найден.")
 
 def get_info():
     terminal_text_Output.delete(1.0, END)
@@ -172,30 +162,6 @@ btn = Button(root,
             )
 btn.place(x = 60, y = 55)
 
-""" btn2 = Button(root,
-            text = 'Добавить контакт',
-            command = add,
-            font = ('Comic Sans MS', 20),
-            bg = 'white',
-            activebackground = 'green',
-            activeforeground = 'white',
-            fg = 'brown',
-            width = 17
-            )
-btn2.place(x = 60, y = 130) """
-
-""" btn3 = Button(root,
-            text = 'Удалить контакт',
-            command = delete_info,
-            font = ('Comic Sans MS', 20),
-            bg = 'white',
-            activebackground = 'green',
-            activeforeground = 'white',
-            fg = 'brown',
-            width = 17
-            )
-btn3.place(x = 60, y = 205) """
-
 btn4 = Button(root,
             text = 'Изменить данные',
             command = change,
@@ -208,16 +174,6 @@ btn4 = Button(root,
             )
 btn4.place(x = 900, y = 685)
 
-""" btn5 = Button(root,
-            text = 'Загрузка справочника',
-            command = load,
-            font = ('Comic Sans MS', 20),
-            bg = 'white',
-            activebackground = 'green',
-            activeforeground = 'white',
-            fg = 'brown'
-            )
-btn5.place(x = 60, y = 355) """
 
 input_data = terminal_text_Input_Phone.get()
 #после ввода данных, нужно удалять все данные из окна:
@@ -317,12 +273,12 @@ label_Phone = Label(root,
 label_Phone.place(x = 445, y = 725)
 
 label_id = Label(root,
-            text = 'Введите id абонента\n для его удаления',
+            text = 'Введите id абонента\n для его изменения/удаления',
             font = ('Comic Sans MS', 13),
             bg = '#FAF5D5',
             fg = '#000000'
             )
-label_id.place(x = 445, y = 770)
+label_id.place(x = 390, y = 770)
 
 root.mainloop()
 
