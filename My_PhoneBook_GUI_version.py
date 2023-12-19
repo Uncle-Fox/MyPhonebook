@@ -13,9 +13,6 @@ labelBg.place(x = 0, y = 0)
 terminal_text_Output = Text(root, wrap=WORD, height=30, width=80, font=('Courier New', 12))
 terminal_text_Output.place(x= 400, y=50)
 
-terminal_text_Input_Info = Text(root, wrap=WORD, height=5, width=23, font=('Courier New', 12))
-terminal_text_Input_Info.place(x= 400, y=655)
-
 terminal_text_Input_Name = Entry(font=('Courier New', 12))
 terminal_text_Input_Name.place(x= 650, y=655)
 
@@ -28,9 +25,8 @@ terminal_text_Input_Email.place(x= 650, y=705)
 terminal_text_Input_Phone = Entry(font=('Courier New', 12))
 terminal_text_Input_Phone.place(x= 650, y=730)
 
-def Input_data():
-    input_data = terminal_text_Input_Name.get()
-    btn7.config(command=lambda: terminal_text_Output.insert(END, f">>> {input_data}"))
+terminal_text_Input_id = Entry(font=('Courier New', 12))
+terminal_text_Input_id.place(x= 650, y=755)
 
 def save(phonebook):
     with open("phoneNumber.json", "w", encoding="utf-8") as doc:
@@ -58,13 +54,6 @@ def clear_input_fields():
     terminal_text_Input_birthday.delete(0, END)
     terminal_text_Input_Email.delete(0, END)
     terminal_text_Input_Phone.delete(0, END)
-
-def add_info():
-    terminal_text_Input_Info.delete(1.0, END)
-    terminal_text_Input_Info.insert(END, f'Введите Имя абонента\n'
-                                        f'Введите дату рождения\n\n'
-                                        f'Введите Email\n'
-                                        f'Введите телефон\n')
 
 def add():
     name = terminal_text_Input_Name.get()
@@ -139,11 +128,11 @@ def delete_info():
 
 def delete(): #сначала будет осуществлен вариант удаления только через id
     phonebook = load()
-    num = terminal_text_Input_Name.get()
+    info_to_delete = terminal_text_Input_Name.get()
 
     key_to_delete = None
     for key, value in phonebook.items():
-        if 'id' in value and value['id'] == int(num):
+        if 'id' in value and value['id'] == int(info_to_delete):
             key_to_delete = key
             break
 
@@ -154,7 +143,6 @@ def delete(): #сначала будет осуществлен вариант �
     else:
         terminal_text_Input_Info.delete(1.0, END)
         terminal_text_Input_Info.insert(END, "Абонент не найден.")
-
 
 def get_info():
     terminal_text_Output.delete(1.0, END)
@@ -209,8 +197,8 @@ btn3 = Button(root,
 btn3.place(x = 60, y = 205)
 
 btn4 = Button(root,
-            text = 'Изменить контакт',
-            command = change,
+            text = 'Изменить данные',
+            command = change_info,
             font = ('Comic Sans MS', 20),
             bg = 'white',
             activebackground = 'green',
@@ -218,9 +206,9 @@ btn4 = Button(root,
             fg = 'brown',
             width = 17
             )
-btn4.place(x = 60, y = 280)
+btn4.place(x = 900, y = 755)
 
-btn5 = Button(root,
+""" btn5 = Button(root,
             text = 'Загрузка справочника',
             command = load,
             font = ('Comic Sans MS', 20),
@@ -229,7 +217,7 @@ btn5 = Button(root,
             activeforeground = 'white',
             fg = 'brown'
             )
-btn5.place(x = 60, y = 355)
+btn5.place(x = 60, y = 355) """
 
 input_data = terminal_text_Input_Phone.get()
 #после ввода данных, нужно удалять все данные из окна:
@@ -253,9 +241,10 @@ btn7 = Button(root,
             bg = 'white',
             activebackground = 'green',
             activeforeground = 'white',
-            fg = 'brown'
+            fg = 'brown',
+            width = 17
             )
-btn7.place(x = 900, y = 660)
+btn7.place(x = 900, y = 615)
 
 btn9 = Button(root,
             text = 'Удалить абонента',
@@ -264,9 +253,10 @@ btn9 = Button(root,
             bg = 'white',
             activebackground = 'green',
             activeforeground = 'white',
-            fg = 'brown'
+            fg = 'brown',
+            width = 17
             )
-btn9.place(x = 900, y = 730)
+btn9.place(x = 900, y = 685)
 
 btn8 = Button(root,
             text = 'Выход',
@@ -283,8 +273,6 @@ label = Label(root,
             text = 'PhoneBook',
             font = ('Comic Sans MS', 20),
             bg = '#FAF5D5',
-            activebackground = 'green',
-            activeforeground = 'white',
             fg = 'brown'
             ).pack()
 
@@ -292,11 +280,49 @@ label2 = Label(root,
             text = 'Ввод данных',
             font = ('Comic Sans MS', 20),
             bg = '#FAF5D5',
-            activebackground = 'green',
-            activeforeground = 'white',
             fg = 'brown'
             )
-label2.place(x = 665, y = 599)
+label2.place(x = 660, y = 599)
+
+label_name = Label(root,
+            text = 'Введите Имя абонента',
+            font = ('Comic Sans MS', 13),
+            bg = '#FAF5D5',
+            fg = '#000000'
+            )
+label_name.place(x = 445, y = 650)
+
+label_birthday = Label(root,
+            text = 'Введите день рождения',
+            font = ('Comic Sans MS', 13),
+            bg = '#FAF5D5',
+            fg = '#000000'
+            )
+label_birthday.place(x = 445, y = 675)
+
+label_Email = Label(root,
+            text = 'Введите Email абонента',
+            font = ('Comic Sans MS', 13),
+            bg = '#FAF5D5',
+            fg = '#000000'
+            )
+label_Email.place(x = 445, y = 700)
+
+label_Phone = Label(root,
+            text = 'Введите телефон',
+            font = ('Comic Sans MS', 13),
+            bg = '#FAF5D5',
+            fg = '#000000'
+            )
+label_Phone.place(x = 445, y = 725)
+
+label_id = Label(root,
+            text = 'Введите id абонента',
+            font = ('Comic Sans MS', 13),
+            bg = '#FAF5D5',
+            fg = '#000000'
+            )
+label_id.place(x = 445, y = 750)
 
 root.mainloop()
 
