@@ -4,7 +4,7 @@ import json
 root = Tk()
 root.title('Phonebook')
 root.geometry('1240x840')
-root.resizable(width = False, height = False)
+root.resizable(width = True, height = True)
 
 bg = PhotoImage(file= "Bg.png")
 labelBg = Label(root, image= bg)
@@ -23,6 +23,12 @@ def Input_data():
     input_data = terminal_text_Input.get("1.0", END)
     btn6.config(command=lambda: terminal_text_Output.insert(END, f">>> {input_data}"))
 
+def delete_all():
+    terminal_text_Output.delete('1.0', END) #пока не работает, должен удалять все надписи в текстовом окне
+
+def delete_info():
+    terminal_text_Input_Info.delete(0, END)
+
 def click():
     x = "Hello!"
     terminal_text_Output.insert(END, f">>> {x}\n")
@@ -40,17 +46,23 @@ def load():
         return {}
 
 def Show_all():
-    print("Текущий телефонный список")
+    delete_all
+    terminal_text_Output.insert(END, "Текущий телефонный справочник\n")
     with open("phoneNumber.json", "r", encoding="utf-8") as doc:
         phonebook_data = json.load(doc)
-        for name, data in phonebook_data.items():
-            terminal_text_Output.insert(END, f"№ {data.get('id', 'N/A')}. {name}: телефон {', '.join(map(str, data['phones']))}; дата рождения: {data.get('birthday', 'N/A')}; email: {data.get('email', 'N/A')}")
+        sorted_phonebook_data = dict(sorted(phonebook_data.items(), key=lambda item: item[0]))
+        for name, data in sorted_phonebook_data.items():
+            terminal_text_Output.insert(END, f"№ {data.get('id', 'N/A')}. {name}: телефон {', '.join(map(str, data['phones']))}; дата рождения: {data.get('birthday', 'N/A')}; email: {data.get('email', 'N/A')}\n")
 
 def add():
     global id_counter
     global phonebook
+    terminal_text_Input_Info.insert(END, f"Введите имя: ")
     name = input("Введите имя: ")
+    delete_info
+    terminal_text_Input_Info.insert(END, f"Введите дату рождения: ")
     birthday = input("Введите дату рождения: ")
+    delete_info
     email = input("Введите EMAIL: ")
     phone = input("Введите номера телефонов через пробел: ").split()
 
@@ -114,8 +126,8 @@ def find_key(num): #Надо использовать эту функцию в d
     if key_to_delete == None: print(f"Абонент с ID {num} не найден")
 
 def delete():
-    global phonebook 
-    Show_all()
+    global phonebook
+    Show_all
     num = (input("Выберите id абонента, которого хотите удалить из книги: "))
     key_to_delete = None
     for key, value in phonebook.items():
@@ -136,7 +148,7 @@ def delete():
 
 btn = Button(root,
             text = 'Открыть контакты',
-            command = click,
+            command = Show_all,
             font = ('Comic Sans MS', 20),
             bg = 'white',
             activebackground = 'green',
@@ -148,7 +160,7 @@ btn.place(x = 60, y = 55)
 
 btn2 = Button(root,
             text = 'Добавить контакт',
-            command = click,
+            command = add,
             font = ('Comic Sans MS', 20),
             bg = 'white',
             activebackground = 'green',
@@ -160,7 +172,7 @@ btn2.place(x = 60, y = 130)
 
 btn3 = Button(root,
             text = 'Удалить контакт',
-            command = click,
+            command = delete,
             font = ('Comic Sans MS', 20),
             bg = 'white',
             activebackground = 'green',
@@ -172,7 +184,7 @@ btn3.place(x = 60, y = 205)
 
 btn4 = Button(root,
             text = 'Изменить контакт',
-            command = click,
+            command = change,
             font = ('Comic Sans MS', 20),
             bg = 'white',
             activebackground = 'green',
@@ -184,7 +196,7 @@ btn4.place(x = 60, y = 280)
 
 btn5 = Button(root,
             text = 'Загрузка справочника',
-            command = click,
+            command = load,
             font = ('Comic Sans MS', 20),
             bg = 'white',
             activebackground = 'green',

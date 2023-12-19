@@ -5,9 +5,8 @@ from tkinter import *
 root = Tk()
 root.title('Phonebook')
 root.geometry('1240x840')
-root.resizable(width = False, height = False)
+root.resizable(width = True, height = True)
 
-#root.config(bg = 'Yellow') - создание фона
 bg = PhotoImage(file= "Bg.png")
 labelBg = Label(root, image= bg)
 labelBg.place(x = 0, y = 0)
@@ -28,17 +27,6 @@ def Input_data():
 def click():
     x = "Hello!"
     terminal_text_Output.insert(END, f">>> {x}\n")
-
-# btn = Button(root,
-#             text = 'Кнопка №1',
-#             command = click,
-#             font = ('Comic Sans MS', 20),
-#             bg = 'white',
-#             activebackground = 'green',
-#             activeforeground = 'white',
-#             fg = 'brown'
-#             # width = 10,
-#            height = 10)
 
 
 btn = Button(root,
