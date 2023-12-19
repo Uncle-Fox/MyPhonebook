@@ -45,7 +45,7 @@ def Show_all():
     terminal_text_Output.insert(END, "Текущий телефонный справочник\n")
     with open("phoneNumber.json", "r", encoding="utf-8") as doc:
         phonebook_data = json.load(doc)
-        sorted_phonebook_data = sorted(phonebook_data.items(), key=lambda item: item[1]["id"]) #- нужно добавить сортировку, сейчас идет сбой int - string из-за int 4 в словаре
+        sorted_phonebook_data = sorted(phonebook_data.items(), key=lambda item: item[1]["id"])
         
         for name, data in sorted_phonebook_data:
             terminal_text_Output.insert(END, f"№ {data.get('id', 'N/A')}. {name}: телефон {', '.join(map(str, data['phones']))}; дата рождения: {data.get('birthday', 'N/A')}; email: {data.get('email', 'N/A')}\n")
@@ -140,9 +140,8 @@ def get_info():
                                     'Открыть контакты - показывает весь справочник\n\n'
                                     'Добавить контакт - добавляет нового абонента в справочник. Для этого:\n'
                                     'Введите внизу программы все необходимые данные и нажмите кнопку "Ввести данные"\n\n'
-                                    'Удалить контакт - удаляет абонента с выбранным именем\n\n'
-                                    'Изменить контакт - меняет данные у выбранного абонента\n\n'
-                                    'Загрузка справочника - загружает справочник из файла\n\n'
+                                    'Удалить контакт - удаляет абонента с выбранным id\n\n'
+                                    'Изменить контакт - меняет данные абонента с выбранным id. Предварительно введите данные\n\n'
                                     'Help - показывает информацию по командам\n\n'
                                     'Ввод данных - сохраняет в программу ваши введенные данные\n\n'
                                     'Выход - выход из программы')
@@ -150,7 +149,7 @@ def get_info():
 def exit_program():
     root.destroy()
 
-btn = Button(root,
+btn_open_book = Button(root,
             text = 'Открыть контакты',
             command = Show_all,
             font = ('Comic Sans MS', 20),
@@ -160,9 +159,9 @@ btn = Button(root,
             fg = 'brown',
             width = 17
             )
-btn.place(x = 60, y = 55)
+btn_open_book.place(x = 60, y = 55)
 
-btn4 = Button(root,
+btn_change_data = Button(root,
             text = 'Изменить данные',
             command = change,
             font = ('Comic Sans MS', 20),
@@ -172,14 +171,9 @@ btn4 = Button(root,
             fg = 'brown',
             width = 17
             )
-btn4.place(x = 900, y = 685)
+btn_change_data.place(x = 900, y = 685)
 
-
-input_data = terminal_text_Input_Phone.get()
-#после ввода данных, нужно удалять все данные из окна:
-#text.delete(1.0,END)
-
-btn6 = Button(root,
+btn_help = Button(root,
             text = 'Help',
             command= get_info,
             font = ('Comic Sans MS', 20),
@@ -188,9 +182,9 @@ btn6 = Button(root,
             activeforeground = 'white',
             fg = 'brown'
             )
-btn6.place(x = 60, y = 430)
+btn_help.place(x = 60, y = 430)
 
-btn7 = Button(root,
+btn_input_data = Button(root,
             text = 'Ввести данные',
             command = add,
             font = ('Comic Sans MS', 20),
@@ -200,9 +194,9 @@ btn7 = Button(root,
             fg = 'brown',
             width = 17
             )
-btn7.place(x = 900, y = 615)
+btn_input_data.place(x = 900, y = 615)
 
-btn9 = Button(root,
+btn_delete_abonent = Button(root,
             text = 'Удалить абонента',
             command = delete,
             font = ('Comic Sans MS', 20),
@@ -212,9 +206,9 @@ btn9 = Button(root,
             fg = 'brown',
             width = 17
             )
-btn9.place(x = 900, y = 755)
+btn_delete_abonent.place(x = 900, y = 755)
 
-btn8 = Button(root,
+btn_exit = Button(root,
             text = 'Выход',
             command = exit_program,
             font = ('Comic Sans MS', 20),
@@ -223,22 +217,22 @@ btn8 = Button(root,
             activeforeground = 'white',
             fg = 'brown'
             )
-btn8.place(x = 60, y = 730)
+btn_exit.place(x = 60, y = 730)
 
-label = Label(root,
+label_main = Label(root,
             text = 'PhoneBook',
             font = ('Comic Sans MS', 20),
             bg = '#FAF5D5',
             fg = 'brown'
             ).pack()
 
-label2 = Label(root,
+label_input_data = Label(root,
             text = 'Ввод данных',
             font = ('Comic Sans MS', 20),
             bg = '#FAF5D5',
             fg = 'brown'
             )
-label2.place(x = 660, y = 599)
+label_input_data.place(x = 660, y = 599)
 
 label_name = Label(root,
             text = 'Введите Имя абонента',
