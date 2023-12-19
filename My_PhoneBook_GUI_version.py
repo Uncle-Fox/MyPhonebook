@@ -4,7 +4,7 @@ import json
 root = Tk()
 root.title('Phonebook')
 root.geometry('1240x840')
-root.resizable(width = True, height = True)
+root.resizable(width = False, height = False)
 
 bg = PhotoImage(file= "Bg.png")
 labelBg = Label(root, image= bg)
@@ -13,25 +13,21 @@ labelBg.place(x = 0, y = 0)
 terminal_text_Output = Text(root, wrap=WORD, height=30, width=80, font=('Courier New', 12))
 terminal_text_Output.place(x= 400, y=50)
 
-terminal_text_Input = Text(root, wrap=WORD, height=5, width=55, font=('Courier New', 12))
+terminal_text_Input = Entry(font=('Courier New', 12))
 terminal_text_Input.place(x= 650, y=655)
 
 terminal_text_Input_Info = Text(root, wrap=WORD, height=5, width=20, font=('Courier New', 12))
 terminal_text_Input_Info.place(x= 400, y=655)
 
 def Input_data():
-    input_data = terminal_text_Input.get("1.0", END)
-    btn6.config(command=lambda: terminal_text_Output.insert(END, f">>> {input_data}"))
+    input_data = terminal_text_Input.get()
+    btn7.config(command=lambda: terminal_text_Output.insert(END, f">>> {input_data}"))
 
 def delete_all():
-    terminal_text_Output.delete('1.0', END) #пока не работает, должен удалять все надписи в текстовом окне
+    terminal_text_Output.delete(1.0, END) #пока не работает, должен удалять все надписи в текстовом окне
 
 def delete_info():
-    terminal_text_Input_Info.delete(0, END)
-
-def click():
-    x = "Hello!"
-    terminal_text_Output.insert(END, f">>> {x}\n")
+    terminal_text_Input_Info.delete(1.0, END)
 
 def save():
     with open("phoneNumber.json", "w", encoding="utf-8") as doc:
@@ -46,46 +42,60 @@ def load():
         return {}
 
 def Show_all():
-    delete_all
+    terminal_text_Output.delete(1.0, END)
     terminal_text_Output.insert(END, "Текущий телефонный справочник\n")
     with open("phoneNumber.json", "r", encoding="utf-8") as doc:
         phonebook_data = json.load(doc)
-        sorted_phonebook_data = dict(sorted(phonebook_data.items(), key=lambda item: item[0]))
-        for name, data in sorted_phonebook_data.items():
+        #sorted_phonebook_data = sorted(phonebook_data.items(), key=lambda item: item[1]["id"]) - нужно добавить сортировку, сейчас идет сбой int - string из-за int 4 в словаре
+        for name, data in phonebook_data.items():
             terminal_text_Output.insert(END, f"№ {data.get('id', 'N/A')}. {name}: телефон {', '.join(map(str, data['phones']))}; дата рождения: {data.get('birthday', 'N/A')}; email: {data.get('email', 'N/A')}\n")
 
 def add():
-    global id_counter
-    global phonebook
-    terminal_text_Input_Info.insert(END, f"Введите имя: ")
-    name = input("Введите имя: ")
-    delete_info
-    terminal_text_Input_Info.insert(END, f"Введите дату рождения: ")
-    birthday = input("Введите дату рождения: ")
-    delete_info
-    email = input("Введите EMAIL: ")
-    phone = input("Введите номера телефонов через пробел: ").split()
-
-    for key, value in phonebook.items():
-        if 'id' in value and value['id'] == id_counter:
-            entry_id = id_counter + 1
-        else: entry_id = id_counter
-
-    if name in phonebook:
-            phonebook[name]['phones'].extend(phone)
-            phonebook[name]['birthday'] = birthday
-            phonebook[name]['email'] = email
-    else:
-        phonebook[name] = {'id': entry_id, 'phones': phone, 'birthday': birthday, 'email': email}
-
-    phone_str = ', '.join(phone)
-    terminal_text_Output.insert(END, f'Вы добавили нового абонента: \n'
-        f'ID: {entry_id}\n'
-        f'Имя: {name}\n'
-        f'День рождения: {birthday}\n'
-        f'Email: {email}\n'
-        f'Телефон: {phone_str}\n')
+    global step, name, birthday, email, phone
+    terminal_text_Input_Info.delete(1.0, END)
     
+    step = 0
+    if step == 0:
+        terminal_text_Input_Info.insert(END, f"Введите имя: ")
+        name = btn7.config(terminal_text_Input.get())
+
+    elif step == 1:
+        terminal_text_Input_Info.insert(END, f"Введите дату рождения: ")
+        birthday = terminal_text_Input.get()
+
+    elif step == 2:
+        terminal_text_Input_Info.insert(END, f"Введите EMAIL: ")
+        email = terminal_text_Input.get()
+
+    elif step == 3:
+        terminal_text_Input_Info.insert(END, f"Введите номера телефонов через пробел: ")
+        phone =  terminal_text_Input.get().split()
+
+    else: 
+        phonebook = load()
+        id_counter = len(phonebook)+1
+
+        for key, value in phonebook.items():
+            if 'id' in value and value['id'] == id_counter:
+                entry_id = id_counter + 1
+            else: entry_id = id_counter
+
+        if name in phonebook:
+                phonebook[name]['phones'].extend(phone)
+                phonebook[name]['birthday'] = birthday
+                phonebook[name]['email'] = email
+        else:
+            phonebook[name] = {'id': entry_id, 'phones': phone, 'birthday': birthday, 'email': email}
+    
+        delete_info
+        terminal_text_Input_Info.delete(1.0, END)
+        step = 0
+        return
+    
+    step += 1
+    delete_info
+
+step = 0
 
 def change():
     global phonebook
@@ -145,6 +155,20 @@ def delete():
     else:
         print(f"Абонент с ID {num} не найден")
 
+def get_info():
+    terminal_text_Output.delete(1.0, END)
+    terminal_text_Output.insert(END, 'Вам доступны следующие кнопки: \n'
+                                    'Открыть контакты - показывает весь справочник\n'
+                                    'Добавить контакт - добавляет нового абонента в справочник\n'
+                                    'Удалить контакт - удаляет абонента с выбранным именем\n'
+                                    'Изменить контакт - меняет данные у выбранного абонента\n'
+                                    'Загрузка справочника - загружает справочник из файла\n'
+                                    'Help - показывает информацию по командам\n'
+                                    'Ввод данных - сохраняет в программу ваши введенные данные\n'
+                                    'Выход - выход из программы')
+
+def exit_program():
+    root.destroy()
 
 btn = Button(root,
             text = 'Открыть контакты',
@@ -205,12 +229,13 @@ btn5 = Button(root,
             )
 btn5.place(x = 60, y = 355)
 
-input_data = terminal_text_Input.get("1.0", END)
+input_data = terminal_text_Input.get()
 #после ввода данных, нужно удалять все данные из окна:
 #text.delete(1.0,END)
 
 btn6 = Button(root,
             text = 'Help',
+            command= get_info,
             font = ('Comic Sans MS', 20),
             bg = 'white',
             activebackground = 'green',
@@ -232,7 +257,7 @@ btn7.place(x = 760, y = 760)
 
 btn8 = Button(root,
             text = 'Выход',
-            command = click,
+            command = exit_program,
             font = ('Comic Sans MS', 20),
             bg = 'white',
             activebackground = 'green',
