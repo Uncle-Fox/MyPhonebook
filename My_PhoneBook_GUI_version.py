@@ -13,21 +13,24 @@ labelBg.place(x = 0, y = 0)
 terminal_text_Output = Text(root, wrap=WORD, height=30, width=80, font=('Courier New', 12))
 terminal_text_Output.place(x= 400, y=50)
 
-terminal_text_Input = Entry(font=('Courier New', 12))
-terminal_text_Input.place(x= 650, y=655)
-
-terminal_text_Input_Info = Text(root, wrap=WORD, height=5, width=20, font=('Courier New', 12))
+terminal_text_Input_Info = Text(root, wrap=WORD, height=5, width=23, font=('Courier New', 12))
 terminal_text_Input_Info.place(x= 400, y=655)
 
+terminal_text_Input_Name = Entry(font=('Courier New', 12))
+terminal_text_Input_Name.place(x= 650, y=655)
+
+terminal_text_Input_birthday = Entry(font=('Courier New', 12))
+terminal_text_Input_birthday.place(x= 650, y=680)
+
+terminal_text_Input_Email = Entry(font=('Courier New', 12))
+terminal_text_Input_Email.place(x= 650, y=705)
+
+terminal_text_Input_Phone = Entry(font=('Courier New', 12))
+terminal_text_Input_Phone.place(x= 650, y=730)
+
 def Input_data():
-    input_data = terminal_text_Input.get()
+    input_data = terminal_text_Input_Name.get()
     btn7.config(command=lambda: terminal_text_Output.insert(END, f">>> {input_data}"))
-
-def delete_all():
-    terminal_text_Output.delete(1.0, END) #пока не работает, должен удалять все надписи в текстовом окне
-
-def delete_info():
-    terminal_text_Input_Info.delete(1.0, END)
 
 def save():
     with open("phoneNumber.json", "w", encoding="utf-8") as doc:
@@ -51,51 +54,34 @@ def Show_all():
             terminal_text_Output.insert(END, f"№ {data.get('id', 'N/A')}. {name}: телефон {', '.join(map(str, data['phones']))}; дата рождения: {data.get('birthday', 'N/A')}; email: {data.get('email', 'N/A')}\n")
 
 def add():
-    global step, name, birthday, email, phone
     terminal_text_Input_Info.delete(1.0, END)
-    
-    step = 0
-    if step == 0:
-        terminal_text_Input_Info.insert(END, f"Введите имя: ")
-        name = btn7.config(terminal_text_Input.get())
+    terminal_text_Input_Info.insert(END, f'Введите Имя абонента\n'
+                                        f'Введите дату рождения\n\n'
+                                        f'Введите Email\n'
+                                        f'Введите телефон\n')
+    name = btn7.config(terminal_text_Input_Name.get())
 
-    elif step == 1:
-        terminal_text_Input_Info.insert(END, f"Введите дату рождения: ")
-        birthday = terminal_text_Input.get()
+    birthday = terminal_text_Input_birthday.get()
 
-    elif step == 2:
-        terminal_text_Input_Info.insert(END, f"Введите EMAIL: ")
-        email = terminal_text_Input.get()
+    email = terminal_text_Input_Email.get()
 
-    elif step == 3:
-        terminal_text_Input_Info.insert(END, f"Введите номера телефонов через пробел: ")
-        phone =  terminal_text_Input.get().split()
+    phone =  terminal_text_Input_Phone.get().split()
 
-    else: 
-        phonebook = load()
-        id_counter = len(phonebook)+1
+    phonebook = load()
+    id_counter = len(phonebook)+1
 
-        for key, value in phonebook.items():
-            if 'id' in value and value['id'] == id_counter:
-                entry_id = id_counter + 1
-            else: entry_id = id_counter
+    for key, value in phonebook.items():
+        if 'id' in value and value['id'] == id_counter:
+            entry_id = id_counter + 1
+        else: entry_id = id_counter
 
-        if name in phonebook:
-                phonebook[name]['phones'].extend(phone)
-                phonebook[name]['birthday'] = birthday
-                phonebook[name]['email'] = email
-        else:
-            phonebook[name] = {'id': entry_id, 'phones': phone, 'birthday': birthday, 'email': email}
-    
-        delete_info
-        terminal_text_Input_Info.delete(1.0, END)
-        step = 0
-        return
-    
-    step += 1
-    delete_info
+    if name in phonebook:
+            phonebook[name]['phones'].extend(phone)
+            phonebook[name]['birthday'] = birthday
+            phonebook[name]['email'] = email
+    else:
+        phonebook[name] = {'id': entry_id, 'phones': phone, 'birthday': birthday, 'email': email}
 
-step = 0
 
 def change():
     global phonebook
@@ -229,7 +215,7 @@ btn5 = Button(root,
             )
 btn5.place(x = 60, y = 355)
 
-input_data = terminal_text_Input.get()
+input_data = terminal_text_Input_Phone.get()
 #после ввода данных, нужно удалять все данные из окна:
 #text.delete(1.0,END)
 
