@@ -65,7 +65,6 @@ def add_info():
                                         f'Введите дату рождения\n\n'
                                         f'Введите Email\n'
                                         f'Введите телефон\n')
-    
 
 def add():
     name = terminal_text_Input_Name.get()
@@ -130,36 +129,44 @@ def find_key(num): #Надо использовать эту функцию в d
             return key_to_delete
     if key_to_delete == None: print(f"Абонент с ID {num} не найден")
 
-def delete():
-    global phonebook
-    Show_all
-    num = (input("Выберите id абонента, которого хотите удалить из книги: "))
+def delete_info():
+    Show_all()
+    terminal_text_Input_Info.delete(1.0, END)
+    terminal_text_Input_Info.insert(END, f'Введите id абонента\n'
+                                        f'Или введите его имя\n\n'
+                                        f'Будет удален выбранный\n'
+                                        f'абонент из вашей книги\n')
+
+def delete(): #сначала будет осуществлен вариант удаления только через id
+    phonebook = load()
+    num = terminal_text_Input_Name.get()
+
     key_to_delete = None
     for key, value in phonebook.items():
-        if 'id' in value and value['id'] == num:
+        if 'id' in value and value['id'] == int(num):
             key_to_delete = key
             break
-    
+
     if key_to_delete is not None:
-        x = input("Вы точно хотите удалить этого абонента? Введите 'N' для 'Нет' или 'Y' для 'Да': ")
-        if x.lower() == 'n':
-            pass
-        elif x.lower() == 'y':
-            del phonebook[key_to_delete]
-            print(f"Абонент с id {key_to_delete} удален из книги.")
+        del phonebook[key_to_delete]
+        save(phonebook)
+        Show_all()
     else:
-        print(f"Абонент с ID {num} не найден")
+        terminal_text_Input_Info.delete(1.0, END)
+        terminal_text_Input_Info.insert(END, "Абонент не найден.")
+
 
 def get_info():
     terminal_text_Output.delete(1.0, END)
     terminal_text_Output.insert(END, 'Вам доступны следующие кнопки: \n'
-                                    'Открыть контакты - показывает весь справочник\n'
-                                    'Добавить контакт - добавляет нового абонента в справочник\n'
-                                    'Удалить контакт - удаляет абонента с выбранным именем\n'
-                                    'Изменить контакт - меняет данные у выбранного абонента\n'
-                                    'Загрузка справочника - загружает справочник из файла\n'
-                                    'Help - показывает информацию по командам\n'
-                                    'Ввод данных - сохраняет в программу ваши введенные данные\n'
+                                    'Открыть контакты - показывает весь справочник\n\n'
+                                    'Добавить контакт - добавляет нового абонента в справочник. Для этого:\n'
+                                    'Введите внизу программы все необходимые данные и нажмите кнопку "Ввести данные"\n\n'
+                                    'Удалить контакт - удаляет абонента с выбранным именем\n\n'
+                                    'Изменить контакт - меняет данные у выбранного абонента\n\n'
+                                    'Загрузка справочника - загружает справочник из файла\n\n'
+                                    'Help - показывает информацию по командам\n\n'
+                                    'Ввод данных - сохраняет в программу ваши введенные данные\n\n'
                                     'Выход - выход из программы')
 
 def exit_program():
@@ -191,7 +198,7 @@ btn2.place(x = 60, y = 130)
 
 btn3 = Button(root,
             text = 'Удалить контакт',
-            command = delete,
+            command = delete_info,
             font = ('Comic Sans MS', 20),
             bg = 'white',
             activebackground = 'green',
@@ -248,7 +255,18 @@ btn7 = Button(root,
             activeforeground = 'white',
             fg = 'brown'
             )
-btn7.place(x = 900, y = 665)
+btn7.place(x = 900, y = 660)
+
+btn9 = Button(root,
+            text = 'Удалить абонента',
+            command = delete,
+            font = ('Comic Sans MS', 20),
+            bg = 'white',
+            activebackground = 'green',
+            activeforeground = 'white',
+            fg = 'brown'
+            )
+btn9.place(x = 900, y = 730)
 
 btn8 = Button(root,
             text = 'Выход',
