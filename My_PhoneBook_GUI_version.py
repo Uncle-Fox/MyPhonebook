@@ -26,7 +26,7 @@ terminal_text_Input_Phone = Entry(font=('Courier New', 12))
 terminal_text_Input_Phone.place(x= 650, y=730)
 
 terminal_text_Input_id = Entry(font=('Courier New', 12))
-terminal_text_Input_id.place(x= 650, y=755)
+terminal_text_Input_id.place(x= 650, y=785)
 
 def save(phonebook):
     with open("phoneNumber.json", "w", encoding="utf-8") as doc:
@@ -172,9 +172,9 @@ btn = Button(root,
             )
 btn.place(x = 60, y = 55)
 
-btn2 = Button(root,
+""" btn2 = Button(root,
             text = 'Добавить контакт',
-            command = add_info,
+            command = add,
             font = ('Comic Sans MS', 20),
             bg = 'white',
             activebackground = 'green',
@@ -182,9 +182,9 @@ btn2 = Button(root,
             fg = 'brown',
             width = 17
             )
-btn2.place(x = 60, y = 130)
+btn2.place(x = 60, y = 130) """
 
-btn3 = Button(root,
+""" btn3 = Button(root,
             text = 'Удалить контакт',
             command = delete_info,
             font = ('Comic Sans MS', 20),
@@ -194,11 +194,11 @@ btn3 = Button(root,
             fg = 'brown',
             width = 17
             )
-btn3.place(x = 60, y = 205)
+btn3.place(x = 60, y = 205) """
 
 btn4 = Button(root,
             text = 'Изменить данные',
-            command = change_info,
+            command = change,
             font = ('Comic Sans MS', 20),
             bg = 'white',
             activebackground = 'green',
@@ -206,7 +206,7 @@ btn4 = Button(root,
             fg = 'brown',
             width = 17
             )
-btn4.place(x = 900, y = 755)
+btn4.place(x = 900, y = 685)
 
 """ btn5 = Button(root,
             text = 'Загрузка справочника',
@@ -256,7 +256,7 @@ btn9 = Button(root,
             fg = 'brown',
             width = 17
             )
-btn9.place(x = 900, y = 685)
+btn9.place(x = 900, y = 755)
 
 btn8 = Button(root,
             text = 'Выход',
@@ -317,12 +317,12 @@ label_Phone = Label(root,
 label_Phone.place(x = 445, y = 725)
 
 label_id = Label(root,
-            text = 'Введите id абонента',
+            text = 'Введите id абонента\n для его удаления',
             font = ('Comic Sans MS', 13),
             bg = '#FAF5D5',
             fg = '#000000'
             )
-label_id.place(x = 445, y = 750)
+label_id.place(x = 445, y = 770)
 
 root.mainloop()
 
