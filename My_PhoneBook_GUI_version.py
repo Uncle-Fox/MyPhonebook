@@ -32,7 +32,7 @@ def Input_data():
     input_data = terminal_text_Input_Name.get()
     btn7.config(command=lambda: terminal_text_Output.insert(END, f">>> {input_data}"))
 
-def save():
+def save(phonebook):
     with open("phoneNumber.json", "w", encoding="utf-8") as doc:
         doc.write(json.dumps(phonebook, ensure_ascii=False))
 
@@ -53,18 +53,24 @@ def Show_all():
         for name, data in phonebook_data.items():
             terminal_text_Output.insert(END, f"№ {data.get('id', 'N/A')}. {name}: телефон {', '.join(map(str, data['phones']))}; дата рождения: {data.get('birthday', 'N/A')}; email: {data.get('email', 'N/A')}\n")
 
-def add():
+def clear_input_fields():
+    terminal_text_Input_Name.delete(0, END)
+    terminal_text_Input_birthday.delete(0, END)
+    terminal_text_Input_Email.delete(0, END)
+    terminal_text_Input_Phone.delete(0, END)
+
+def add_info():
     terminal_text_Input_Info.delete(1.0, END)
     terminal_text_Input_Info.insert(END, f'Введите Имя абонента\n'
                                         f'Введите дату рождения\n\n'
                                         f'Введите Email\n'
                                         f'Введите телефон\n')
-    name = btn7.config(terminal_text_Input_Name.get())
+    
 
+def add():
+    name = terminal_text_Input_Name.get()
     birthday = terminal_text_Input_birthday.get()
-
     email = terminal_text_Input_Email.get()
-
     phone =  terminal_text_Input_Phone.get().split()
 
     phonebook = load()
@@ -82,6 +88,9 @@ def add():
     else:
         phonebook[name] = {'id': entry_id, 'phones': phone, 'birthday': birthday, 'email': email}
 
+    save(phonebook)
+    Show_all()
+    #clear_input_fields
 
 def change():
     global phonebook
@@ -170,7 +179,7 @@ btn.place(x = 60, y = 55)
 
 btn2 = Button(root,
             text = 'Добавить контакт',
-            command = add,
+            command = add_info,
             font = ('Comic Sans MS', 20),
             bg = 'white',
             activebackground = 'green',
@@ -231,15 +240,15 @@ btn6 = Button(root,
 btn6.place(x = 60, y = 430)
 
 btn7 = Button(root,
-            text = 'Ввод данных',
-            command = Input_data,
+            text = 'Ввести данные',
+            command = add,
             font = ('Comic Sans MS', 20),
             bg = 'white',
             activebackground = 'green',
             activeforeground = 'white',
             fg = 'brown'
             )
-btn7.place(x = 760, y = 760)
+btn7.place(x = 900, y = 665)
 
 btn8 = Button(root,
             text = 'Выход',
@@ -262,24 +271,16 @@ label = Label(root,
             ).pack()
 
 label2 = Label(root,
-            text = 'Ввод команд',
+            text = 'Ввод данных',
             font = ('Comic Sans MS', 20),
             bg = '#FAF5D5',
             activebackground = 'green',
             activeforeground = 'white',
             fg = 'brown'
             )
-label2.place(x = 750, y = 599)
+label2.place(x = 665, y = 599)
 
 root.mainloop()
 
 phonebook = load()
 id_counter = len(phonebook)+1
-info = ('Вам доступны следующие команды: \n'
-    'save - сохраняет ваши изменения в файл\n'
-    'load - загружает справочник из файла\n'
-    'all - показывает весь справочник\n'
-    'info - показывает информацию по командам\n'
-    'delete - удаляет абонента с выбранным именем\n'
-    'change - меняет данные у выбранного абонента\n'
-    'exit - выход из программы')
